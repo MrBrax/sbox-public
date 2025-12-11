@@ -84,12 +84,12 @@ internal static class TooltipSystem
 		// Calculate horizontal position
 		// Try to place tooltip to the right of cursor
 		float leftPos = pos.x + offset;
-		
+
 		if ( leftPos + tooltipWidth + margin > screenSize.x )
 		{
 			// Doesn't fit on right, try left
 			float rightPos = screenSize.x - (pos.x - offset);
-			
+
 			if ( pos.x - offset - tooltipWidth - margin >= 0 )
 			{
 				// Fits on left
@@ -111,12 +111,12 @@ internal static class TooltipSystem
 		// Calculate vertical position
 		// Try to place tooltip above cursor
 		float bottomPos = screenSize.y - (pos.y - offset);
-		
+
 		if ( pos.y - offset - tooltipHeight - margin < 0 )
 		{
 			// Doesn't fit above, try below
 			float topPos = pos.y + offset;
-			
+
 			if ( topPos + tooltipHeight + margin <= screenSize.y )
 			{
 				// Fits below

@@ -54,20 +54,25 @@ internal class WorldInputInternal : PanelInput
 				worldPanels.Add( panel );
 		}
 
-		// In order of distance, update our mouse on them
-		foreach ( var panel in worldPanels.OrderBy( x => x.WorldDistance ) )
+		// Only update hover state if we have panels to check
+		if ( worldPanels.Count > 0 )
 		{
-			inputData.MousePos = panel.WorldCursor;
-			if ( UpdateMouse( panel, inputData ) )
+			// In order of distance, update our mouse on them
+			foreach ( var panel in worldPanels.OrderBy( x => x.WorldDistance ) )
 			{
-				hoveredAny = true;
-				break;
+				inputData.MousePos = panel.WorldCursor;
+				if ( UpdateMouse( panel, inputData ) )
+				{
+					hoveredAny = true;
+					break;
+				}
 			}
-		}
 
-		if ( !hoveredAny )
-		{
-			SetHovered( null );
+			// Only clear hover if we checked panels but found nothing
+			if ( !hoveredAny )
+			{
+				SetHovered( null );
+			}
 		}
 
 		SimulateEvents();

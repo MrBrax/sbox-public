@@ -212,6 +212,9 @@ public abstract partial class PanelComponent : Component, IPanelComponent
 	/// <inheritdoc cref="Panel.OnMouseOver(MousePanelEvent)"/>
 	internal protected virtual void OnMouseOver( MousePanelEvent e ) { }
 
+	/// <inheritdoc cref="Panel.OnMouseEnter(MousePanelEvent)"/>
+	internal protected virtual void OnMouseEnter( MousePanelEvent e ) { }
+
 	/// <inheritdoc cref="Panel.OnMouseWheel(Vector2)"/>
 	internal protected virtual void OnMouseWheel( Vector2 value ) { }
 }
@@ -247,5 +250,6 @@ file class CustomBuildPanel : Panel
 	protected override void OnMouseOut( MousePanelEvent e ) => component.OnMouseOut( e );
 	protected override void OnMouseLeave( MousePanelEvent e ) => component.OnMouseLeave( e );
 	protected override void OnMouseOver( MousePanelEvent e ) => component.OnMouseOver( e );
+	protected override void OnMouseEnter( MousePanelEvent e ) => component.OnMouseEnter( e );
 	public override void OnMouseWheel( Vector2 value ) => component.OnMouseWheel( value );
 }

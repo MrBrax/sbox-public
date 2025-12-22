@@ -210,6 +210,11 @@ internal class PanelInput
 					Panel.Switch( PseudoClass.Hover, true, Hovered );
 
 				Hovered.CreateEvent( new MousePanelEvent( "onmouseover", Hovered, "none" ) );
+				
+				// Create non-bubbling mouseenter event for the exact panel we're entering
+				var enterEvent = new MousePanelEvent( "onmouseenter", Hovered, "none" );
+				enterEvent.StopPropagation();
+				Hovered.CreateEvent( enterEvent );
 			}
 		}
 

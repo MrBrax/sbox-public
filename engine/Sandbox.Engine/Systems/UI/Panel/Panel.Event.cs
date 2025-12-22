@@ -234,6 +234,7 @@ public partial class Panel
 			if ( e.Is( "onmouseover" ) ) OnMouseOver( mpe );
 			if ( e.Is( "onmouseout" ) ) OnMouseOut( mpe );
 			if ( e.Is( "onmouseleave" ) ) OnMouseLeave( mpe );
+			if ( e.Is( "onmouseenter" ) ) OnMouseEnter( mpe );
 
 			if ( !e.Is( "onmousemove" ) )
 			{
@@ -316,6 +317,11 @@ public partial class Panel
 	/// Called when the cursor enters this panel.
 	/// </summary>
 	protected virtual void OnMouseOver( MousePanelEvent e ) { }
+
+	/// <summary>
+	/// Called when the cursor enters this panel. Unlike <see cref="OnMouseOver"/>, this event does not bubble to parent panels.
+	/// </summary>
+	protected virtual void OnMouseEnter( MousePanelEvent e ) { }
 
 	/// <summary>
 	/// Called when the cursor leaves this panel.

@@ -16,6 +16,10 @@ internal class PanelInput
 	/// </summary>
 	public Panel Active { get; private set; }
 
+	/// <summary>
+	/// All panels the mouse is currently inside (for mouseenter/mouseleave tracking)
+	/// </summary>
+	private HashSet<Panel> _enteredPanels = new HashSet<Panel>();
 
 	//public string LastCursor;
 
@@ -195,11 +199,6 @@ internal class PanelInput
 			{
 				Panel.Switch( PseudoClass.Hover, false, Hovered, current );
 				Hovered.CreateEvent( new MousePanelEvent( "onmouseout", Hovered, "none" ) );
-				
-				// Create non-bubbling mouseleave event for the exact panel we're leaving
-				var leaveEvent = new MousePanelEvent( "onmouseleave", Hovered, "none" );
-				leaveEvent.StopPropagation();
-				Hovered.CreateEvent( leaveEvent );
 			}
 
 			Hovered = current;
@@ -210,11 +209,40 @@ internal class PanelInput
 					Panel.Switch( PseudoClass.Hover, true, Hovered );
 
 				Hovered.CreateEvent( new MousePanelEvent( "onmouseover", Hovered, "none" ) );
-				
-				// Create non-bubbling mouseenter event for the exact panel we're entering
-				var enterEvent = new MousePanelEvent( "onmouseenter", Hovered, "none" );
+			}
+		}
+
+		// Track mouseenter/mouseleave for all panels in the hierarchy
+		// Build a set of all panels the mouse is currently inside
+		HashSet<Panel> currentlyInside = new HashSet<Panel>();
+		Panel p = current;
+		while ( p != null )
+		{
+			currentlyInside.Add( p );
+			p = p.Parent;
+		}
+
+		// Fire mouseleave for panels we've left
+		foreach ( var panel in _enteredPanels.ToArray() )
+		{
+			if ( !currentlyInside.Contains( panel ) )
+			{
+				var leaveEvent = new MousePanelEvent( "onmouseleave", panel, "none" );
+				leaveEvent.StopPropagation();
+				panel.CreateEvent( leaveEvent );
+				_enteredPanels.Remove( panel );
+			}
+		}
+
+		// Fire mouseenter for panels we've entered
+		foreach ( var panel in currentlyInside )
+		{
+			if ( !_enteredPanels.Contains( panel ) )
+			{
+				var enterEvent = new MousePanelEvent( "onmouseenter", panel, "none" );
 				enterEvent.StopPropagation();
-				Hovered.CreateEvent( enterEvent );
+				panel.CreateEvent( enterEvent );
+				_enteredPanels.Add( panel );
 			}
 		}
 

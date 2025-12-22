@@ -233,6 +233,7 @@ public partial class Panel
 			if ( e.Is( "onmousemove" ) ) OnMouseMove( mpe );
 			if ( e.Is( "onmouseover" ) ) OnMouseOver( mpe );
 			if ( e.Is( "onmouseout" ) ) OnMouseOut( mpe );
+			if ( e.Is( "onmouseleave" ) ) OnMouseLeave( mpe );
 
 			if ( !e.Is( "onmousemove" ) )
 			{
@@ -320,6 +321,11 @@ public partial class Panel
 	/// Called when the cursor leaves this panel.
 	/// </summary>
 	protected virtual void OnMouseOut( MousePanelEvent e ) { }
+
+	/// <summary>
+	/// Called when the cursor leaves this panel. Unlike <see cref="OnMouseOut"/>, this event does not bubble to parent panels.
+	/// </summary>
+	protected virtual void OnMouseLeave( MousePanelEvent e ) { }
 
 	/// <summary>
 	/// Called when the player presses the "Back" button while hovering this panel, which is typically "mouse 5", aka one of the mouse buttons on its side.

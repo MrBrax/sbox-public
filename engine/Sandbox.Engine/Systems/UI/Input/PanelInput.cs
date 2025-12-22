@@ -195,6 +195,11 @@ internal class PanelInput
 			{
 				Panel.Switch( PseudoClass.Hover, false, Hovered, current );
 				Hovered.CreateEvent( new MousePanelEvent( "onmouseout", Hovered, "none" ) );
+				
+				// Create non-bubbling mouseleave event for the exact panel we're leaving
+				var leaveEvent = new MousePanelEvent( "onmouseleave", Hovered, "none" );
+				leaveEvent.StopPropagation();
+				Hovered.CreateEvent( leaveEvent );
 			}
 
 			Hovered = current;

@@ -193,7 +193,9 @@ internal class PanelInput
 
 	internal void SetHovered( Panel current )
 	{
-		if ( current != Hovered )
+		bool hoverChanged = current != Hovered;
+		
+		if ( hoverChanged )
 		{
 			if ( Hovered != null )
 			{
@@ -210,39 +212,39 @@ internal class PanelInput
 
 				Hovered.CreateEvent( new MousePanelEvent( "onmouseover", Hovered, "none" ) );
 			}
-		}
 
-		// Track mouseenter/mouseleave for all panels in the hierarchy
-		// Build a set of all panels the mouse is currently inside
-		HashSet<Panel> currentlyInside = new HashSet<Panel>();
-		Panel p = current;
-		while ( p != null )
-		{
-			currentlyInside.Add( p );
-			p = p.Parent;
-		}
-
-		// Fire mouseleave for panels we've left
-		foreach ( var panel in _enteredPanels.ToArray() )
-		{
-			if ( !currentlyInside.Contains( panel ) )
+			// Track mouseenter/mouseleave for all panels in the hierarchy
+			// Build a set of all panels the mouse is currently inside
+			HashSet<Panel> currentlyInside = new HashSet<Panel>();
+			Panel p = current;
+			while ( p != null )
 			{
-				var leaveEvent = new MousePanelEvent( "onmouseleave", panel, "none" );
-				leaveEvent.StopPropagation();
-				panel.CreateEvent( leaveEvent );
-				_enteredPanels.Remove( panel );
+				currentlyInside.Add( p );
+				p = p.Parent;
 			}
-		}
 
-		// Fire mouseenter for panels we've entered
-		foreach ( var panel in currentlyInside )
-		{
-			if ( !_enteredPanels.Contains( panel ) )
+			// Fire mouseleave for panels we've left
+			foreach ( var panel in _enteredPanels.ToArray() )
 			{
-				var enterEvent = new MousePanelEvent( "onmouseenter", panel, "none" );
-				enterEvent.StopPropagation();
-				panel.CreateEvent( enterEvent );
-				_enteredPanels.Add( panel );
+				if ( !currentlyInside.Contains( panel ) )
+				{
+					var leaveEvent = new MousePanelEvent( "onmouseleave", panel, "none" );
+					leaveEvent.StopPropagation();
+					panel.CreateEvent( leaveEvent );
+					_enteredPanels.Remove( panel );
+				}
+			}
+
+			// Fire mouseenter for panels we've entered
+			foreach ( var panel in currentlyInside )
+			{
+				if ( !_enteredPanels.Contains( panel ) )
+				{
+					var enterEvent = new MousePanelEvent( "onmouseenter", panel, "none" );
+					enterEvent.StopPropagation();
+					panel.CreateEvent( enterEvent );
+					_enteredPanels.Add( panel );
+				}
 			}
 		}
 
